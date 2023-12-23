@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ItemCatEdit</class>
+ <widget class="QDialog" name="ItemCatEdit">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Редактирование каталога</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
@@ -23,7 +26,8 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:rgb(170, 255, 127)</string>
+    <string notr="true">background-color:rgb(170, 255, 127);
+color: rgb(16, 0, 255);</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -49,7 +53,7 @@
      <string>Редактирование</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="katalog">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -85,7 +89,7 @@
      <string>Сохранить</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="opisanie">
     <property name="geometry">
      <rect>
       <x>110</x>
