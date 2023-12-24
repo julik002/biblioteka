@@ -113,7 +113,7 @@ color: rgb(255, 71, 41);</string>
          <string>Редактировать</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton__app">
+       <widget class="QPushButton" name="pushButton_app">
         <property name="geometry">
          <rect>
           <x>40</x>
