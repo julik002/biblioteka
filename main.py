@@ -707,7 +707,6 @@ class Uchet(QtWidgets.QWidget, Ui_UchetWindow):
             self.tableWidget.setRowCount(0)
             self.tableWidget.setHorizontalHeaderLabels(["Читатель", "Книга", "Дата сдачи"])  # Заголовки столбцов
             for row_number, row_data in enumerate(books):
-                print(row_number, row_data)
                 self.tableWidget.insertRow(row_number)
                 for column_number, data in enumerate(row_data):
                     item = QtWidgets.QTableWidgetItem(str(data))
