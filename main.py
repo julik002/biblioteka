@@ -122,22 +122,32 @@ class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def open_katalogi(self):
         self.ui = Spisok_katalogov(self.reset_filter)
-        self.ui.show()
+        if cnst.MAX:
+            self.ui.showMaximized()
+        else:
+            self.ui.show()
 
     def open_chitateli(self):
         self.ui = Spisok_chitateley(self.reset_filter)
-        self.ui.show()
+        if cnst.MAX:
+            self.ui.showMaximized()
+        else:
+            self.ui.show()
 
     def open_knigi(self):
         self.ui = Spisok_knig(self.reset_filter)
-        self.ui.show()
+        if cnst.MAX:
+            self.ui.showMaximized()
+        else:
+            self.ui.show()
 
-    def open_uchet(self, MainWindow):
+    def open_uchet(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Uchet()
-        self.ui.setupUi(self.window)
-        self.window.show()
-        MainWindow.close()
+        if cnst.MAX:
+            self.ui.showMaximized()
+        else:
+            self.ui.show()
 
 
 class Spisok_katalogov(QtWidgets.QWidget, Ui_CatListWindow):
@@ -790,5 +800,9 @@ class Uchet(object):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     ui = BBMainWindow()
-    ui.show()
+    ui.showMaximized()
+    if cnst.MAX:
+        ui.showMaximized()
+    else:
+        ui.show()
     sys.exit(app.exec_())
