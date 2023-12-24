@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ViewWindow</class>
+ <widget class="QDialog" name="ViewWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>380</height>
+    <width>635</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,8 +22,8 @@ color: rgb(0, 26, 255);</string>
     <rect>
      <x>9</x>
      <y>9</y>
-     <width>511</width>
-     <height>361</height>
+     <width>611</width>
+     <height>481</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -38,8 +38,8 @@ color: rgb(0, 26, 255);</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>30</y>
+      <x>280</x>
+      <y>10</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -53,27 +53,36 @@ color: rgb(0, 26, 255);</string>
      <string>Книга</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="label_book">
     <property name="geometry">
      <rect>
-      <x>86</x>
-      <y>102</y>
-      <width>341</width>
-      <height>131</height>
+      <x>26</x>
+      <y>52</y>
+      <width>561</width>
+      <height>361</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(171, 255, 128);</string>
     </property>
     <property name="text">
      <string>TextLabel</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>262</y>
+      <x>230</x>
+      <y>420</y>
       <width>181</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 16, 0);</string>
     </property>
     <property name="text">
      <string>Оформить книгу</string>

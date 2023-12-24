@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>PrepareWindow</class>
+ <widget class="QDialog" name="PrepareWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -22,6 +22,10 @@
      <height>361</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(170, 255, 127);
+color: rgb(255, 0, 29);</string>
+   </property>
    <property name="frameShape">
     <enum>QFrame::Box</enum>
    </property>
@@ -31,9 +35,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>0</x>
       <y>10</y>
-      <width>261</width>
+      <width>501</width>
       <height>41</height>
      </rect>
     </property>
@@ -45,12 +49,15 @@
     <property name="text">
      <string>Оформление книги</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="lineEdit_name">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>70</y>
+      <x>170</x>
+      <y>110</y>
       <width>291</width>
       <height>31</height>
      </rect>
@@ -63,12 +70,15 @@
     <property name="text">
      <string>Название книги</string>
     </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="lineEdit_number">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>120</y>
+      <x>170</x>
+      <y>160</y>
       <width>291</width>
       <height>31</height>
      </rect>
@@ -82,11 +92,11 @@
      <string>№ читательского билета</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
+   <widget class="QLineEdit" name="lineEdit_date0">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>170</y>
+      <x>170</x>
+      <y>210</y>
       <width>291</width>
       <height>31</height>
      </rect>
@@ -100,11 +110,11 @@
      <string>Дата оформления</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="lineEdit_date1">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>220</y>
+      <x>170</x>
+      <y>260</y>
       <width>291</width>
       <height>31</height>
      </rect>
@@ -121,8 +131,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>164</x>
-      <y>280</y>
+      <x>170</x>
+      <y>310</y>
       <width>171</width>
       <height>31</height>
      </rect>
@@ -132,8 +142,127 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
     <property name="text">
      <string>Оформить книгу</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_code">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>60</y>
+      <width>291</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Код книги</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>60</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(22, 65, 255);</string>
+    </property>
+    <property name="text">
+     <string>Код книги:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>120</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(22, 65, 255);</string>
+    </property>
+    <property name="text">
+     <string>Наименование:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>170</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(22, 65, 255);</string>
+    </property>
+    <property name="text">
+     <string>№ чит.билета:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>220</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(22, 65, 255);</string>
+    </property>
+    <property name="text">
+     <string>Дата оформления:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>270</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(22, 65, 255);</string>
+    </property>
+    <property name="text">
+     <string>Дата сдачи:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
   </widget>
