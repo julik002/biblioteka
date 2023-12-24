@@ -15,6 +15,7 @@ from forms.Редактирование_каталога import Ui_ItemCatEdit
 from forms.Новый_каталог import Ui_NewCat
 from forms.Редактирование_читателя import Ui_EditChitWindow
 from forms.Редактирование_книги import Ui_BookWindow
+from forms.Учет import Ui_UchetWindow
 
 
 class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -27,6 +28,7 @@ class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_cat.clicked.connect(self.open_katalogi)
         self.pushButton_read.clicked.connect(self.open_chitateli)
         self.pushButton_books.clicked.connect(self.open_knigi)
+        self.pushButton_out.clicked.connect(self.open_uchet)
         self.reset_filter()
 
     def reset_filter(self):
@@ -142,8 +144,7 @@ class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.ui.show()
 
     def open_uchet(self):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Uchet()
+        self.ui = Uchet(self.reset_filter)
         if cnst.MAX:
             self.ui.showMaximized()
         else:
@@ -155,6 +156,7 @@ class Spisok_katalogov(QtWidgets.QWidget, Ui_CatListWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowModality(2)
+        self.setWindowTitle("Библиотека: Каталоги")
         self.pushButton_back.clicked.connect(self.close)
         self.pushButton_edit.clicked.connect(self.open_red_kataloga)
         self.pushButton_app.clicked.connect(self.open_dobavit_katalog)
@@ -188,6 +190,7 @@ class Spisok_katalogov(QtWidgets.QWidget, Ui_CatListWindow):
                 for j, value in enumerate(row):
                     # Создайте элемент таблицы QTableWidgetItem с соответствующим значением
                     item = QtWidgets.QTableWidgetItem(str(value))
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)  # Disable editing for other columns
                     # Установите элемент в соответствующую ячейку таблицы
                     self.tableWidget.setItem(i, j, item)
             self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)  # Prevent column resizing
@@ -247,6 +250,9 @@ class red_kataloga(QtWidgets.QWidget, Ui_ItemCatEdit):
         # elf.Dialog = Dialog
         self.pushButton.clicked.connect(self.save_iz_kataloga)
 
+    def closeEvent(self, a0):
+        self.refresh_table()
+
     def save_iz_kataloga(self):
         # Получите данные из полей для ввода
         katalog = self.katalog.text()
@@ -261,13 +267,7 @@ class red_kataloga(QtWidgets.QWidget, Ui_ItemCatEdit):
                 cursor.execute(update_query, (katalog, opisanie, self.katalog_key,))
                 # Сохраните изменения в базе данных
                 conn.commit()
-            try:
-                self.refresh_table()  # Здесь необходимо определить метод refresh_table() для обновления таблицы
-                # self.Dialog.accept()
-                self.close()
-                # Обновите таблицу tablewidget
-            except Exception as e:
-                print("Ошибка при закрытии окна или обновлении таблицы:", e)
+            self.close()
         except sqlite3.Error as error:
             # Обработайте возможную ошибку при выполнении операций с базой данных
             print("Ошибка при выполнении операций с базой данных:", error)
@@ -280,6 +280,9 @@ class okno_dobavit_katalog(QtWidgets.QWidget, Ui_NewCat):
         self.setWindowModality(2)
         self.refresh_table = refresh_table
         self.pushButton.clicked.connect(self.save_iz_kataloga)
+
+    def closeEvent(self, a0):
+        self.refresh_table()
 
     def save_iz_kataloga(self):
         # Получите данные из полей для ввода
@@ -294,15 +297,6 @@ class okno_dobavit_katalog(QtWidgets.QWidget, Ui_NewCat):
                 insert_query = "INSERT INTO Каталоги (Название_каталога, Описание_каталога) VALUES (?, ?)"
                 cursor.execute(insert_query, (naz_kataloga, opisanie,))
                 conn.commit()
-            try:
-                self.refresh_table()  # Здесь необходимо определить метод refresh_table() для обновления таблицы
-                print("Обновлено")
-                # self.Dialog.accept()
-                self.close()
-                print("ЗАкрыто")
-                # Обновите таблицу tablewidget
-            except Exception as e:
-                print("Ошибка при закрытии окна или обновлении таблицы:", e)
         except sqlite3.Error as error:
             if "UNIQUE constraint failed" in str(error):
                 QtWidgets.QMessageBox.about(self, f"{naz_kataloga}",
@@ -317,6 +311,7 @@ class Spisok_chitateley(QtWidgets.QWidget, Ui_CatListWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowModality(2)
+        self.setWindowTitle("Библиотека: Список читателей")
         self.label.setText("Читатели")
         self.pushButton_back.clicked.connect(self.close)
         self.pushButton_edit.clicked.connect(self.open_red_chitatela)
@@ -324,6 +319,9 @@ class Spisok_chitateley(QtWidgets.QWidget, Ui_CatListWindow):
         self.pushButton_del.clicked.connect(self.delete_selected_row)
         self.refresh_parrent = refresh_parrent
         self.refresh_table()
+
+    def closeEvent(self, a0):
+        self.refresh_parrent()
 
     def refresh_table(self):
         try:
@@ -350,6 +348,7 @@ class Spisok_chitateley(QtWidgets.QWidget, Ui_CatListWindow):
                 for j, value in enumerate(row):
                     # Создайте элемент таблицы QTableWidgetItem с соответствующим значением
                     item = QtWidgets.QTableWidgetItem(str(value))
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)  # Disable editing for other columns
                     # Установите элемент в соответствующую ячейку таблицы
                     self.tableWidget.setItem(i, j, item)
             self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)  # Prevent column resizing
@@ -408,6 +407,9 @@ class red_chitatela(QtWidgets.QWidget, Ui_EditChitWindow):
         self.refresh_table = refresh_table
         self.pushButton.clicked.connect(self.save_iz_chitatela)
 
+    def closeEvent(self, a0):
+        self.refresh_table()
+
     def save_iz_chitatela(self):
         # Получите данные из полей для ввода
         fio = self.lineEdit_fio.text()
@@ -445,6 +447,9 @@ class dobavit_chitatela(QtWidgets.QWidget, Ui_EditChitWindow):
         self.refresh_table = refresh_table
         self.pushButton.clicked.connect(self.save_chitatela)
 
+    def closeEvent(self, a0):
+        self.refresh_table()
+
     def save_chitatela(self):
         # Получите данные из полей для ввода
         chitatel_fio = self.lineEdit_fio.text()
@@ -465,7 +470,6 @@ class dobavit_chitatela(QtWidgets.QWidget, Ui_EditChitWindow):
                                    (chitatel_fio, chitatel_data_rojdenia, chitatel_chit_bilet, chitatel_phone))
                     # Сохраните изменения в базе данных
                     conn.commit()
-                self.refresh_table()
             else:
                 QtWidgets.QMessageBox.about(self, "",
                                             f"{chitatel_chit_bilet}\n\nНеправильный формат!")
@@ -482,14 +486,18 @@ class Spisok_knig(QtWidgets.QWidget, Ui_CatListWindow):
     def __init__(self, refresh_parrent):
         super().__init__()
         self.setupUi(self)
+        self.setWindowTitle("Библиотека: Каталог книг")
         self.label.setText("Каталог книг")
         self.setWindowModality(2)
         self.pushButton_back.clicked.connect(self.close)
         self.pushButton_edit.clicked.connect(self.open_red_knigi)
-        # self.pushButton_app.clicked.connect(self.open_dobavit_chitatela)
-        # self.pushButton_del.clicked.connect(self.delete_selected_row)
+        self.pushButton_app.clicked.connect(self.open_dobavit_knigy)
+        self.pushButton_del.clicked.connect(self.delete_selected_row)
         self.refresh_parrent = refresh_parrent
         self.refresh_table()
+
+    def closeEvent(self, a0):
+        self.refresh_parrent()
 
     def refresh_table(self):
         with bd_connect() as conn:
@@ -550,27 +558,29 @@ class Spisok_knig(QtWidgets.QWidget, Ui_CatListWindow):
             self.ui.lineEdit_limit.setText(vozrastnoe_ogranichenie)
             self.ui.lineEdit_cat.setText(katalog)
             self.ui.lineEdit_comment.setText(annotaciya)
+            self.ui.kod_knigi = kod_knigi
             self.ui.show()
 
-    def open_dobavit_knigy(self, MainWindow):
-        self.window = QtWidgets.QDialog()
-        self.ui = dobavit_knigy()
-        self.ui.setupUi(self.window)
-        self.window.show()
+    def open_dobavit_knigy(self):
+        self.ui = dobavit_knigy(self.refresh_table)
+        self.ui.label.setText("Новая книга")
+        self.ui.show()
 
     def delete_selected_row(self):
         selected_row = self.tableWidget.currentRow()
         if selected_row >= 0:
             # Получение значения первой ячейки выбранной строки
             kniga = self.tableWidget.item(selected_row, 0).text()
-
             # Удаление строки из таблицы каталогов в базе данных
-            conn = bd_connect()
-            cursor = conn.cursor()
-            cursor.execute("DELETE FROM Книги WHERE Код_книги = ?", (kniga,))
-            conn.commit()
-            conn.close()
-
+            userResponse = QtWidgets.QMessageBox.question(self, "",
+                                                          f"{kniga}\n\nУдаляем безвозвратно?",
+                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                                                QtWidgets.QMessageBox.No)
+            if userResponse == QtWidgets.QMessageBox.Yes:
+                with bd_connect() as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("DELETE FROM Книги WHERE Код_книги = ?", (kniga,))
+                    conn.commit()
             self.tableWidget.removeRow(selected_row)
 
 
@@ -581,220 +591,137 @@ class red_knigi(QtWidgets.QWidget, Ui_BookWindow):
         self.label.setText("Редактирование")
         self.setWindowModality(2)
         self.refresh_table = refresh_table
+        self.kod_knigi = ''
         self.pushButton.clicked.connect(self.save_iz_kigi)
+
+    def closeEvent(self, a0):
+        self.refresh_table()
 
     def save_iz_kigi(self):
         # Получите данные из полей для ввода
-        kod_knigi = self.lineEdit.text()
-        naz = self.lineEdit_2.text()
-        avtor = self.lineEdit_3.text()
-        izdatelstvo = self.lineEdit_4.text()
-        vozras_ogran = self.lineEdit_5.text()
-        katalog = self.lineEdit_6.text()
-        annotasia = self.lineEdit_7.text()
+        kod_knigi = self.lineEdit_code.text()
+        naz = self.lineEdit_name.text()
+        avtor = self.lineEdit_autor.text()
+        izdatelstvo = self.lineEdit_source.text()
+        vozras_ogran = self.lineEdit_limit.text()
+        katalog = self.lineEdit_cat.text()
+        annotasia = self.lineEdit_comment.text()
 
+        print(self.kod_knigi, kod_knigi, izdatelstvo)
         # Сохраните данные в базу данных
         try:
             # Подключитесь к базе данных
-            conn = bd_connect()
-            cursor = conn.cursor()
-
-            # Удалите старую запись, если она существует
-            delete_query = "DELETE FROM Книги WHERE Код_книги = ?"
-            cursor.execute(delete_query, (kod_knigi,))
-
-            # Выполните запрос на вставку новой записи
-            insert_query = "INSERT INTO Книги (Код_книги, Название_книги, Автор, Издательство, Возрастное_ограничение, Каталог, Аннотация) VALUES (?, ?, ?, ?, ?, ?, ?)"
-            cursor.execute(insert_query,
-                           (kod_knigi, naz, avtor, izdatelstvo, vozras_ogran,
-                            katalog, annotasia))
-
-            # Сохраните изменения в базе данных
-            conn.commit()
-
-            # Закройте соединение с базой данных
-            conn.close()
-
+            with bd_connect()as conn:
+                cursor = conn.cursor()
+                # Выполните запрос на вставку новой записи
+                update_query = """UPDATE Книги SET Код_книги=?, Название_книги=?, Автор=?, 
+                    Издательство=?, Возрастное_ограничение=?, Каталог=?, Аннотация=?
+                    WHERE Код_книги=?"""
+                cursor.execute(update_query,
+                               (kod_knigi, naz, avtor, izdatelstvo, vozras_ogran,
+                                katalog, annotasia, self.kod_knigi))
+                # Сохраните изменения в базе данных
+                conn.commit()
         except sqlite3.Error as error:
             # Обработайте возможную ошибку при выполнении операций с базой данных
             print("Ошибка при выполнении операций с базой данных:", error)
+        self.close()
 
 
-class dobavit_knigy(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(530, 377)
-        self.frame = QtWidgets.QFrame(Dialog)
-        self.frame.setGeometry(QtCore.QRect(10, 10, 511, 361))
-        self.frame.setStyleSheet("background-color:rgb(170, 255, 127)")
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(190, 10, 151, 31))
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.lineEdit = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit.setGeometry(QtCore.QRect(10, 70, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit.setFont(font)
-        self.lineEdit.setObjectName("lineEdit")
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_2.setGeometry(QtCore.QRect(270, 70, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_2.setFont(font)
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.lineEdit_3 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_3.setGeometry(QtCore.QRect(10, 120, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_3.setFont(font)
-        self.lineEdit_3.setObjectName("lineEdit_3")
-        self.lineEdit_4 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_4.setGeometry(QtCore.QRect(270, 120, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_4.setFont(font)
-        self.lineEdit_4.setObjectName("lineEdit_4")
-        self.lineEdit_5 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_5.setGeometry(QtCore.QRect(10, 170, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_5.setFont(font)
-        self.lineEdit_5.setObjectName("lineEdit_5")
-        self.lineEdit_6 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_6.setGeometry(QtCore.QRect(270, 170, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_6.setFont(font)
-        self.lineEdit_6.setObjectName("lineEdit_6")
-        self.lineEdit_7 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_7.setGeometry(QtCore.QRect(40, 220, 431, 61))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_7.setFont(font)
-        self.lineEdit_7.setObjectName("lineEdit_7")
-        self.pushButton = QtWidgets.QPushButton(self.frame)
-        self.pushButton.setGeometry(QtCore.QRect(190, 300, 131, 31))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.pushButton.setFont(font)
-        self.pushButton.setObjectName("pushButton")
+class dobavit_knigy(QtWidgets.QWidget, Ui_BookWindow):
+    def __init__(self, refresh_table):
+        super().__init__()
+        self.setupUi(self)
+        self.label.setText("Новая книга")
+        self.setWindowTitle("Добавляем книгу")
+        self.setWindowModality(2)
+        self.refresh_table = refresh_table
+        self.kod_knigi = ''
+        self.pushButton.clicked.connect(self.save_iz_kigi)
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+    def closeEvent(self, a0):
+        self.refresh_table()
 
-    def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Новая книга"))
-        self.label.setText(_translate("Dialog", "Новая книги"))
-        self.lineEdit.setText(_translate("Dialog", "Код книги"))
-        self.lineEdit_2.setText(_translate("Dialog", "Название книги"))
-        self.lineEdit_3.setText(_translate("Dialog", "Автор"))
-        self.lineEdit_4.setText(_translate("Dialog", "Издательство"))
-        self.lineEdit_5.setText(_translate("Dialog", "Возрастное ограничение"))
-        self.lineEdit_6.setText(_translate("Dialog", "Каталог"))
-        self.lineEdit_7.setText(_translate("Dialog", "Аннотация"))
-        self.pushButton.setText(_translate("Dialog", "Создать"))
+    def save_iz_kigi(self):
+        # Получите данные из полей для ввода
+        kod_knigi = self.lineEdit_code.text()
+        naz = self.lineEdit_name.text()
+        avtor = self.lineEdit_autor.text()
+        izdatelstvo = self.lineEdit_source.text()
+        vozras_ogran = self.lineEdit_limit.text()
+        katalog = self.lineEdit_cat.text()
+        annotasia = self.lineEdit_comment.text()
+
+        if kod_knigi.isdigit():
+            # Сохраните данные в базу данных
+            try:
+                # Подключитесь к базе данных
+                with bd_connect()as conn:
+                    cursor = conn.cursor()
+                    # Выполните запрос на вставку новой записи
+                    update_query = """INSERT INTO Книги (Код_книги, Название_книги, Автор, 
+                        Издательство, Возрастное_ограничение, Каталог, Аннотация)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)"""
+                    cursor.execute(update_query,
+                                   (kod_knigi, naz, avtor, izdatelstvo, vozras_ogran,
+                                    katalog, annotasia))
+                    # Сохраните изменения в базе данных
+                    conn.commit()
+            except sqlite3.Error as error:
+                # Обработайте возможную ошибку при выполнении операций с базой данных
+                print("Ошибка при выполнении операций с базой данных:", error)
+        self.close()
 
 
-class Uchet(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1367, 700)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 1371, 81))
-        self.frame.setContextMenuPolicy(QtCore.Qt.PreventContextMenu)
-        self.frame.setStyleSheet("background-color:rgb(170, 255, 127)")
-        self.frame.setFrameShape(QtWidgets.QFrame.Box)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(600, 20, 161, 31))
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.pushButton_3 = QtWidgets.QPushButton(self.frame)
-        self.pushButton_3.setGeometry(QtCore.QRect(30, 20, 181, 41))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setStyleSheet("background-color:rgb(255, 255, 255)")
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.frame_2 = QtWidgets.QFrame(self.centralwidget)
-        self.frame_2.setGeometry(QtCore.QRect(159, 109, 1081, 561))
-        self.frame_2.setStyleSheet("background-color:rgb(170, 255, 127)")
-        self.frame_2.setFrameShape(QtWidgets.QFrame.Box)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.tableWidget = QtWidgets.QTableWidget(self.frame_2)
-        self.tableWidget.setGeometry(QtCore.QRect(105, 61, 871, 461))
-        self.tableWidget.setStyleSheet("background-color:rgb(255, 255, 255)")
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(3)
-        self.tableWidget.setColumnWidth(0, 350)
-        self.tableWidget.setColumnWidth(1, 350)
-        self.tableWidget.setColumnWidth(2, 185)
+class Uchet(QtWidgets.QWidget, Ui_UchetWindow):
+    def __init__(self, refresh_parrent):
+        super().__init__()
+        self.setupUi(self)
+        self.setWindowTitle("Библиотека: Учёт")
+        self.label.setText("Учёт выдачи")
+        self.setWindowModality(2)
+        self.pushButton_back.clicked.connect(self.close)
+        # self.pushButton_edit.clicked.connect(self.open_red_knigi)
+        # self.pushButton_app.clicked.connect(self.open_dobavit_knigy)
+        # self.pushButton_del.clicked.connect(self.delete_selected_row)
+        self.refresh_parrent = refresh_parrent
+        self.refresh_table()
 
-        self.tableWidget.setHorizontalHeaderLabels(
-            ["Читатель", "Книга", "Дата сдачи"])  # Заголовки столбцов
+    def closeEvent(self, a0):
+        self.refresh_parrent()
 
+    def refresh_table(self):
         # Подключение к существующей базе данных
-        conn = bd_connect()
-        cursor = conn.cursor()
+        with bd_connect() as conn:
+            cursor = conn.cursor()
+            # Выполнение запроса SELECT для получения данных из таблицы книги
+            select_str = """SELECT Читатели.ФИО AS Читатель, Книги.Название_книги AS Название_книги, 
+                       Оформление_книги.Дата_сдачи AS Дата_сдачи
+                FROM Оформление_книги
+                JOIN Книги ON Оформление_книги.Название_книги = Книги.Код_книги 
+                JOIN Читатели ON Оформление_книги.№читательского_билета = Читатели.№читательского_билета
+                """
+            cursor.execute(select_str)
+            books = cursor.fetchall()
+            self.tableWidget.setColumnCount(3)
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setHorizontalHeaderLabels(["Читатель", "Книга", "Дата сдачи"])  # Заголовки столбцов
+            for row_number, row_data in enumerate(books):
+                self.tableWidget.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(data))
+                    item.setTextAlignment(QtCore.Qt.AlignHCenter)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)  # Disable editing for other columns
+                    self.tableWidget.setItem(row_number, column_number, item)
 
-        # Выполнение запроса SELECT для получения данных из таблицы книги
-        cursor.execute(
-            "SELECT Читатели.ФИО AS Читатель, Книги.Название_книги AS Название_книги, Оформление_книги.Дата_сдачи AS Дата_сдачи "
-            "FROM Оформление_книги "
-            "JOIN Книги ON Оформление_книги.Название_книги = Книги.Код_книги "
-            "JOIN Читатели ON Оформление_книги.№читательского_билета = Читатели.№читательского_билета")
-        books = cursor.fetchall()
-
-        # Заполнение таблицы данными
-        for row_number, row_data in enumerate(books):
-            self.tableWidget.insertRow(row_number)
-
-            for column_number, data in enumerate(row_data):
-                item = QtWidgets.QTableWidgetItem(str(data))
-                item.setTextAlignment(QtCore.Qt.AlignVCenter)
-                item.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-                item_font = QtGui.QFont()
-                item_font.setPointSize(12)
-                item.setFont(item_font)
-                item.setSizeHint(QtCore.QSize(100, 100))
-                self.tableWidget.setItem(row_number, column_number, item)
-
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
-        self.tableWidget.resizeRowsToContents()
-
-        # Закрытие подключения
-        conn.close()
-        MainWindow.setCentralWidget(self.centralwidget)
-
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Учет выдачи"))
-        self.label.setText(_translate("MainWindow", "Учет выдачи"))
-        self.pushButton_3.setText(_translate("MainWindow", "Назад"))
-        self.pushButton_3.clicked.connect(lambda: self.nazad4(MainWindow))
-
-    def nazad4(self, MainWindow):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self.window)
-        self.window.show()
-        MainWindow.close()
+            self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)  # Prevent column resizing
+            # self.tableWidget.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)  # Prevent column resizing
+            # self.tableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)  # Prevent column resizing
+            self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+            self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+            # self.tableWidget.setShowGrid(True)
+            # self.tableWidget.setGridStyle(QtCore.Qt.SolidLine)
+            self.tableWidget.resizeRowsToContents()
 
 
 if __name__ == "__main__":
