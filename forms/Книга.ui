@@ -14,7 +14,8 @@
    <string>Книга</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:rgb(170, 255, 127)</string>
+   <string notr="true">background-color:rgb(170, 255, 127);
+color: rgb(0, 26, 255);</string>
   </property>
   <widget class="QFrame" name="frame">
    <property name="geometry">

@@ -46,6 +46,9 @@
        <pointsize>22</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 25, 16);</string>
+     </property>
      <property name="text">
       <string>Книги</string>
      </property>
@@ -61,7 +64,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:rgb(170, 255, 127)</string>
+     <string notr="true">background-color:rgb(170, 255, 127);
+color: rgb(255, 0, 4);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
@@ -147,7 +151,8 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color:rgb(255, 255, 255)</string>
+      <string notr="true">background-color:rgb(255, 255, 255);
+color: rgb(0, 32, 255);</string>
      </property>
      <property name="text">
       <string>Назад</string>

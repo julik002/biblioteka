@@ -13,8 +13,8 @@ from forms.Главное_окошко import Ui_MainWindow
 from forms.Спиcок_каталогов import Ui_CatListWindow
 from forms.Редактирование_каталога import Ui_ItemCatEdit
 from forms.Новый_каталог import Ui_NewCat
-from forms.Список_читателей import Ui_ReaderListWindow
 from forms.Редактирование_читателя import Ui_EditChitWindow
+from forms.Редактирование_книги import Ui_BookWindow
 
 
 class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -26,7 +26,7 @@ class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_6.clicked.connect(self.reset_filter)
         self.pushButton_cat.clicked.connect(self.open_katalogi)
         self.pushButton_read.clicked.connect(self.open_chitateli)
-
+        self.pushButton_books.clicked.connect(self.open_knigi)
         self.reset_filter()
 
     def reset_filter(self):
@@ -124,16 +124,13 @@ class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui = Spisok_katalogov(self.reset_filter)
         self.ui.show()
 
-    def open_chitateli(self, MainWindow):
+    def open_chitateli(self):
         self.ui = Spisok_chitateley(self.reset_filter)
         self.ui.show()
 
-    def open_knigi(self, MainWindow):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Spisok_knig()
-        self.ui.setupUi(self.window)
-        self.window.show()
-        MainWindow.close()
+    def open_knigi(self):
+        self.ui = Spisok_knig(self.reset_filter)
+        self.ui.show()
 
     def open_uchet(self, MainWindow):
         self.window = QtWidgets.QMainWindow()
@@ -305,11 +302,12 @@ class okno_dobavit_katalog(QtWidgets.QWidget, Ui_NewCat):
                 print("Ошибка при выполнении операций с базой данных:", error)
 
 
-class Spisok_chitateley(QtWidgets.QWidget, Ui_ReaderListWindow):
+class Spisok_chitateley(QtWidgets.QWidget, Ui_CatListWindow):
     def __init__(self, refresh_parrent):
         super().__init__()
         self.setupUi(self)
         self.setWindowModality(2)
+        self.label.setText("Читатели")
         self.pushButton_back.clicked.connect(self.close)
         self.pushButton_edit.clicked.connect(self.open_red_chitatela)
         self.pushButton_app.clicked.connect(self.open_dobavit_chitatela)
@@ -428,6 +426,7 @@ class red_chitatela(QtWidgets.QWidget, Ui_EditChitWindow):
             print("Ошибка при выполнении операций с базой данных:", error)
         self.close()
 
+
 class dobavit_chitatela(QtWidgets.QWidget, Ui_EditChitWindow):
     def __init__(self, refresh_table):
         super().__init__()
@@ -468,123 +467,59 @@ class dobavit_chitatela(QtWidgets.QWidget, Ui_EditChitWindow):
             print("Ошибка при выполнении операций с базой данных:", error)
         self.close()
 
-class Spisok_knig(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1360, 700)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 1361, 91))
-        self.frame.setStyleSheet("background-color:rgb(170, 255, 127)")
-        self.frame.setFrameShape(QtWidgets.QFrame.Box)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(660, 20, 81, 41))
-        font = QtGui.QFont()
-        font.setPointSize(22)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.frame_2 = QtWidgets.QFrame(self.centralwidget)
-        self.frame_2.setGeometry(QtCore.QRect(0, 90, 271, 611))
-        self.frame_2.setStyleSheet("background-color:rgb(170, 255, 127)")
-        self.frame_2.setFrameShape(QtWidgets.QFrame.Box)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.pushButton = QtWidgets.QPushButton(self.frame_2)
-        self.pushButton.setGeometry(QtCore.QRect(40, 60, 181, 41))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.frame_2)
-        self.pushButton_2.setGeometry(QtCore.QRect(40, 120, 181, 41))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setStyleSheet("background-color:rgb(255, 255, 255)")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.frame_2)
-        self.pushButton_3.setGeometry(QtCore.QRect(40, 178, 181, 41))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setStyleSheet("background-color:rgb(255, 255, 255)")
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_4 = QtWidgets.QPushButton(self.frame_2)
-        self.pushButton_4.setGeometry(QtCore.QRect(40, 240, 181, 41))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.pushButton_4.setFont(font)
-        self.pushButton_4.setStyleSheet("background-color:rgb(255, 255, 255)")
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(270, 90, 1091, 611))
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(7)
-        self.tableWidget.setColumnWidth(1, 200)
-        self.tableWidget.setColumnWidth(2, 300)
-        self.tableWidget.setColumnWidth(3, 150)
-        self.tableWidget.setColumnWidth(4, 150)
-        self.tableWidget.setColumnWidth(5, 150)
-        self.tableWidget.setColumnWidth(6, 150)
-        self.tableWidget.setHorizontalHeaderLabels(
-            ["Код книги", "Название книги", "Аннотация", "Автор", "Каталог", "Издательство",
-             "Возрастное \n ограничение"])  # Заголовки столбцов
 
-        font = QFont("Arial", 12)
-        self.tableWidget.setFont(font)
+class Spisok_knig(QtWidgets.QWidget, Ui_CatListWindow):
+    def __init__(self, refresh_parrent):
+        super().__init__()
+        self.setupUi(self)
+        self.label.setText("Каталог книг")
+        self.setWindowModality(2)
+        self.pushButton_back.clicked.connect(self.close)
+        self.pushButton_edit.clicked.connect(self.open_red_knigi)
+        # self.pushButton_app.clicked.connect(self.open_dobavit_chitatela)
+        # self.pushButton_del.clicked.connect(self.delete_selected_row)
+        self.refresh_parrent = refresh_parrent
+        self.refresh_table()
 
-        # Подключение к существующей базе данных
-        conn = bd_connect()
-        cursor = conn.cursor()
-
-        # Выполнение запроса SELECT для получения данных из таблицы книги
-        cursor.execute("SELECT * FROM Книги")
-        books = cursor.fetchall()
-
+    def refresh_table(self):
+        with bd_connect() as conn:
+            cursor = conn.cursor()
+            # Выполнение запроса SELECT для получения данных из таблицы книги
+            cursor.execute("SELECT * FROM Книги")
+            books = cursor.fetchall()
         # Заполнение таблицы данными
+        self.tableWidget.setColumnCount(7)
+        self.tableWidget.setRowCount(0)
+        self.tableWidget.setHorizontalHeaderLabels(
+            ["Код", "Название книги", "Аннотация", "Автор", "Каталог", "Издательство",
+             "Возрастное \n ограничение"])  # Заголовки столбцов
         for row_number, row_data in enumerate(books):
             self.tableWidget.insertRow(row_number)
+            # font = QFont("Arial", 12)
+            # self.tableWidget.setFont(font)
             for column_number, data in enumerate(row_data):
-                if column_number == 2:
 
+                if column_number == 2:
                     text_edit = QtWidgets.QTextEdit(str(data))
                     text_edit.setReadOnly(True)
                     text_edit.setFrameStyle(QtWidgets.QFrame.NoFrame)
                     text_edit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
                     self.tableWidget.setCellWidget(row_number, column_number, text_edit)
-
                 else:
                     item = QtWidgets.QTableWidgetItem(str(data))
+                    item.setTextAlignment(QtCore.Qt.AlignHCenter)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)  # Disable editing for other columns
                     self.tableWidget.setItem(row_number, column_number, item)
 
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)  # Prevent column resizing
+        self.tableWidget.horizontalHeader().setSectionResizeMode(
+            QtWidgets.QHeaderView.Stretch)  # Prevent column resizing
+        self.tableWidget.horizontalHeader().setSectionResizeMode(0,QtWidgets.QHeaderView.ResizeToContents)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.ResizeToContents)
+        self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.tableWidget.resizeRowsToContents()
-        # Закрытие подключения
-        conn.close()
-        MainWindow.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Список_книг"))
-        self.label.setText(_translate("MainWindow", "Книги"))
-        self.pushButton.setText(_translate("MainWindow", "Редактировать"))
-        self.pushButton.clicked.connect(lambda: self.open_red_knigi(MainWindow))
-        self.pushButton_2.setText(_translate("MainWindow", "Добавить"))
-        self.pushButton_2.clicked.connect(lambda: self.open_dobavit_knigy(MainWindow))
-        self.pushButton_3.setText(_translate("MainWindow", "Удалить"))
-        self.pushButton_3.clicked.connect(self.delete_selected_row)
-        self.pushButton_4.setText(_translate("MainWindow", "Назад"))
-        self.pushButton_4.clicked.connect(lambda: self.nazad3(MainWindow))
-
-    def open_red_knigi(self, MainWindow):
+    def open_red_knigi(self):
         # Получение выбранной строки
         selected_row = self.tableWidget.currentRow()
         if selected_row >= 0:
@@ -596,19 +531,16 @@ class Spisok_knig(object):
             katalog = self.tableWidget.item(selected_row, 4).text()
             izdatelstvo = self.tableWidget.item(selected_row, 5).text()
             vozrastnoe_ogranichenie = self.tableWidget.item(selected_row, 6).text()
-            self.window = QtWidgets.QDialog()
-            self.ui = red_knigi()
-            self.ui.setupUi(self.window)
-
+            self.ui = red_knigi(self.refresh_table)
             # Заполнение полей окна редактирования данными из выбранной строки
-            self.ui.lineEdit.setText(kod_knigi)
-            self.ui.lineEdit_2.setText(nazvanie)
-            self.ui.lineEdit_3.setText(avtor)
-            self.ui.lineEdit_4.setText(izdatelstvo)
-            self.ui.lineEdit_5.setText(vozrastnoe_ogranichenie)
-            self.ui.lineEdit_6.setText(katalog)
-            self.ui.lineEdit_7.setText(annotaciya)
-            self.window.show()
+            self.ui.lineEdit_code.setText(kod_knigi)
+            self.ui.lineEdit_name.setText(nazvanie)
+            self.ui.lineEdit_autor.setText(avtor)
+            self.ui.lineEdit_source.setText(izdatelstvo)
+            self.ui.lineEdit_limit.setText(vozrastnoe_ogranichenie)
+            self.ui.lineEdit_cat.setText(katalog)
+            self.ui.lineEdit_comment.setText(annotaciya)
+            self.ui.show()
 
     def open_dobavit_knigy(self, MainWindow):
         self.window = QtWidgets.QDialog()
@@ -631,94 +563,14 @@ class Spisok_knig(object):
 
             self.tableWidget.removeRow(selected_row)
 
-    def nazad3(self, MainWindow):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self.window)
-        self.window.show()
-        MainWindow.close()
 
-
-class red_knigi(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(530, 379)
-        self.frame = QtWidgets.QFrame(Dialog)
-        self.frame.setGeometry(QtCore.QRect(9, 9, 511, 361))
-        self.frame.setStyleSheet("background-color:rgb(170, 255, 127)")
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(160, 10, 211, 31))
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.lineEdit = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit.setGeometry(QtCore.QRect(10, 70, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit.setFont(font)
-        self.lineEdit.setObjectName("lineEdit")
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_2.setGeometry(QtCore.QRect(270, 70, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_2.setFont(font)
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.lineEdit_3 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_3.setGeometry(QtCore.QRect(10, 120, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_3.setFont(font)
-        self.lineEdit_3.setObjectName("lineEdit_3")
-        self.lineEdit_4 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_4.setGeometry(QtCore.QRect(270, 120, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_4.setFont(font)
-        self.lineEdit_4.setObjectName("lineEdit_4")
-        self.lineEdit_5 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_5.setGeometry(QtCore.QRect(10, 170, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_5.setFont(font)
-        self.lineEdit_5.setObjectName("lineEdit_5")
-        self.lineEdit_6 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_6.setGeometry(QtCore.QRect(270, 170, 231, 31))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_6.setFont(font)
-        self.lineEdit_6.setObjectName("lineEdit_6")
-        self.lineEdit_7 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_7.setGeometry(QtCore.QRect(40, 220, 431, 61))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lineEdit_7.setFont(font)
-        self.lineEdit_7.setObjectName("lineEdit_7")
-        self.pushButton = QtWidgets.QPushButton(self.frame)
-        self.pushButton.setGeometry(QtCore.QRect(190, 300, 131, 31))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.pushButton.setFont(font)
-        self.pushButton.setObjectName("pushButton")
-
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
-
-    def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Редактирование_книги"))
-        self.label.setText(_translate("Dialog", "Редактирование"))
-        self.lineEdit.setText(_translate("Dialog", "Код книги"))
-        self.lineEdit_2.setText(_translate("Dialog", "Название"))
-        self.lineEdit_3.setText(_translate("Dialog", "Автора"))
-        self.lineEdit_4.setText(_translate("Dialog", "Издательство"))
-        self.lineEdit_5.setText(_translate("Dialog", "Возрастное ограничение"))
-        self.lineEdit_6.setText(_translate("Dialog", "Каталог"))
-        self.lineEdit_7.setText(_translate("Dialog", "Аннотация"))
-        self.pushButton.setText(_translate("Dialog", "Сохранить"))
+class red_knigi(QtWidgets.QWidget, Ui_BookWindow):
+    def __init__(self, refresh_table):
+        super().__init__()
+        self.setupUi(self)
+        self.label.setText("Редактирование")
+        self.setWindowModality(2)
+        self.refresh_table = refresh_table
         self.pushButton.clicked.connect(self.save_iz_kigi)
 
     def save_iz_kigi(self):
