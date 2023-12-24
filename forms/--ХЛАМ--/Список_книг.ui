@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Список читателей</string>
+   <string>Список_книг</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="frame">
@@ -35,9 +35,9 @@
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>620</x>
+       <x>660</x>
        <y>20</y>
-       <width>131</width>
+       <width>81</width>
        <height>41</height>
       </rect>
      </property>
@@ -46,8 +46,11 @@
        <pointsize>22</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 25, 16);</string>
+     </property>
      <property name="text">
-      <string>Читатели</string>
+      <string>Книги</string>
      </property>
     </widget>
    </widget>
@@ -61,7 +64,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:rgb(170, 255, 127)</string>
+     <string notr="true">background-color:rgb(170, 255, 127);
+color: rgb(255, 0, 4);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
@@ -147,7 +151,8 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color:rgb(255, 255, 255)</string>
+      <string notr="true">background-color:rgb(255, 255, 255);
+color: rgb(0, 32, 255);</string>
      </property>
      <property name="text">
       <string>Назад</string>

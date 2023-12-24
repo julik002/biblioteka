@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>EditChitWindow</class>
+ <widget class="QDialog" name="EditChitWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,14 +16,15 @@
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>9</x>
-     <y>9</y>
+     <x>10</x>
+     <y>10</y>
      <width>511</width>
      <height>361</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:rgb(170, 255, 127)</string>
+    <string notr="true">background-color:rgb(170, 255, 127);
+color: rgb(1, 36, 255);</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::Box</enum>
@@ -46,10 +47,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Редактирование</string>
+     <string>Читатель библиотеки</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="lineEdit_fio">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -64,10 +65,10 @@
      </font>
     </property>
     <property name="text">
-     <string>ФИО</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="lineEdit_born">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -82,10 +83,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Дата рождения</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
+   <widget class="QLineEdit" name="lineEdit_number">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -100,10 +101,10 @@
      </font>
     </property>
     <property name="text">
-     <string>№ читательского билета</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="lineEdit_phone">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -118,7 +119,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Номер телефона</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
@@ -137,6 +138,60 @@
     </property>
     <property name="text">
      <string>Сохранить</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>80</y>
+      <width>58</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ФИО</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>130</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Дата 
+рождения</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>180</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>№ чит.
+билета</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>230</y>
+      <width>58</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Телефон</string>
     </property>
    </widget>
   </widget>

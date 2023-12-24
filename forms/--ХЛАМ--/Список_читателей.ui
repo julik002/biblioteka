@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CatListWindow</class>
- <widget class="QWidget" name="CatListWindow">
+ <class>ReaderListWindow</class>
+ <widget class="QWidget" name="ReaderListWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -61,7 +61,7 @@
        <string notr="true">color: rgb(13, 89, 255);</string>
       </property>
       <property name="text">
-       <string>Каталоги</string>
+       <string>Читатели</string>
       </property>
      </widget>
     </widget>

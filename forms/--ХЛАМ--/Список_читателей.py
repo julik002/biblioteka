@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Список_каталогов.ui'
+# Form implementation generated from reading ui file 'Список_читателей.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -11,13 +11,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_CatListWindow(object):
-    def setupUi(self, CatListWindow):
-        CatListWindow.setObjectName("CatListWindow")
-        CatListWindow.resize(906, 551)
-        self.verticalLayout = QtWidgets.QVBoxLayout(CatListWindow)
+class Ui_ReaderListWindow(object):
+    def setupUi(self, ReaderListWindow):
+        ReaderListWindow.setObjectName("ReaderListWindow")
+        ReaderListWindow.resize(906, 551)
+        self.verticalLayout = QtWidgets.QVBoxLayout(ReaderListWindow)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.frame = QtWidgets.QFrame(CatListWindow)
+        self.frame = QtWidgets.QFrame(ReaderListWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -43,7 +43,7 @@ class Ui_CatListWindow(object):
         self.verticalLayout.addWidget(self.frame)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.frame_2 = QtWidgets.QFrame(CatListWindow)
+        self.frame_2 = QtWidgets.QFrame(ReaderListWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -87,7 +87,7 @@ class Ui_CatListWindow(object):
 "color: rgb(0, 37, 255);")
         self.pushButton_back.setObjectName("pushButton_back")
         self.horizontalLayout_2.addWidget(self.frame_2)
-        self.tableWidget = QtWidgets.QTableWidget(CatListWindow)
+        self.tableWidget = QtWidgets.QTableWidget(ReaderListWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -99,24 +99,24 @@ class Ui_CatListWindow(object):
         self.horizontalLayout_2.addWidget(self.tableWidget)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
-        self.retranslateUi(CatListWindow)
-        QtCore.QMetaObject.connectSlotsByName(CatListWindow)
+        self.retranslateUi(ReaderListWindow)
+        QtCore.QMetaObject.connectSlotsByName(ReaderListWindow)
 
-    def retranslateUi(self, CatListWindow):
+    def retranslateUi(self, ReaderListWindow):
         _translate = QtCore.QCoreApplication.translate
-        CatListWindow.setWindowTitle(_translate("CatListWindow", "Библиотека: Список каталогов"))
-        self.label.setText(_translate("CatListWindow", "Каталоги"))
-        self.pushButton_edit.setText(_translate("CatListWindow", "Редактировать"))
-        self.pushButton_app.setText(_translate("CatListWindow", "Добавить"))
-        self.pushButton_del.setText(_translate("CatListWindow", "Удалить"))
-        self.pushButton_back.setText(_translate("CatListWindow", "Назад"))
+        ReaderListWindow.setWindowTitle(_translate("ReaderListWindow", "Библиотека: Список каталогов"))
+        self.label.setText(_translate("ReaderListWindow", "Читатели"))
+        self.pushButton_edit.setText(_translate("ReaderListWindow", "Редактировать"))
+        self.pushButton_app.setText(_translate("ReaderListWindow", "Добавить"))
+        self.pushButton_del.setText(_translate("ReaderListWindow", "Удалить"))
+        self.pushButton_back.setText(_translate("ReaderListWindow", "Назад"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    CatListWindow = QtWidgets.QWidget()
-    ui = Ui_CatListWindow()
-    ui.setupUi(CatListWindow)
-    CatListWindow.show()
+    ReaderListWindow = QtWidgets.QWidget()
+    ui = Ui_ReaderListWindow()
+    ui.setupUi(ReaderListWindow)
+    ReaderListWindow.show()
     sys.exit(app.exec_())

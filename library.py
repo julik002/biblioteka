@@ -9,4 +9,4 @@ def bd_connect():
 
 
 class Constants:
-    WIDTH = 1400
+    MAX = True
