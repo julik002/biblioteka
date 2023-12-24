@@ -35,9 +35,9 @@ color: rgb(7, 0, 255);</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>0</x>
       <y>0</y>
-      <width>211</width>
+      <width>511</width>
       <height>31</height>
      </rect>
     </property>
@@ -51,6 +51,9 @@ color: rgb(7, 0, 255);</string>
     </property>
     <property name="text">
      <string>Редактирование</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_code">

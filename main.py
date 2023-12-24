@@ -3,9 +3,10 @@
 import sys
 import os
 import sqlite3
+from datetime import date
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QBrush, QColor
 
 from library import bd_connect
 from library import Constants as cnst
@@ -16,6 +17,82 @@ from forms.Новый_каталог import Ui_NewCat
 from forms.Редактирование_читателя import Ui_EditChitWindow
 from forms.Редактирование_книги import Ui_BookWindow
 from forms.Учет import Ui_UchetWindow
+from forms.Книга import Ui_ViewWindow
+from forms.Оформление import Ui_PrepareWindow
+
+
+class PrepareBook(QtWidgets.QWidget, Ui_PrepareWindow):
+    def __init__(self, row_book, name):
+        super().__init__()
+        self.setupUi(self)
+        self.setWindowModality(2)
+        self.current_book = row_book
+        self.name = name
+        self.number = ''
+        self.date0 = str(date.today())
+        self.date1 = ''
+        self.lineEdit_code.setText(self.current_book)
+        self.lineEdit_name.setText(self.name)
+        self.lineEdit_number.setText(self.number)
+        self.lineEdit_date0.setText(self.date0)
+        self.lineEdit_date1.setText(self.date1)
+        self.pushButton.clicked.connect(self.fixed_deal)
+
+    def fixed_deal(self):
+        with bd_connect() as conn:
+            cursor = conn.cursor()
+            query = """SELECT count(*) FROM Читатели WHERE №читательского_билета = ?"""
+            cursor.execute(query, (self.lineEdit_number.text(),))
+            count = cursor.fetchone()
+            if count and count[0] > 0 and self.lineEdit_date0.text():
+                try:
+                    query = """INSERT INTO Оформление_книги (Название_книги, №читательского_билета, 
+                         Дата_оформления, Дата_сдачи) VALUES (?, ?, ?, ?)"""
+                    cursor.execute(query, (self.lineEdit_code.text(), self.lineEdit_number.text(),
+                                           self.lineEdit_date0.text(), self.lineEdit_date1.text()))
+                    conn.commit()
+                except sqlite3.Error as error:
+                    # Обработайте возможную ошибку при выполнении операций с базой данных
+                    print("Ошибка при выполнении операций с базой данных:", error)
+
+            else:
+                QtWidgets.QMessageBox.information(
+                    self, "Оформление книги", "Введены некорректные или неполные данные")
+
+            self.close()
+
+
+class ViewBook(QtWidgets.QWidget, Ui_ViewWindow):
+    def __init__(self, row_book):
+        super().__init__()
+        self.setupUi(self)
+        self.setWindowModality(2)
+        self.current_book = row_book
+        self.name = ""
+        self.pushButton.clicked.connect(self.next_step)
+        self.refresh_table()
+
+    def refresh_table(self):
+        with bd_connect() as conn:
+            cursor = conn.cursor()
+            # Выполнение запроса SELECT для получения списка книг в выбранном каталоге
+            query = """SELECT * FROM Книги WHERE Код_книги=?"""
+            cursor.execute(query, (self.current_book,))
+            selected_book = cursor.fetchone()
+            out = ""
+            out += f"Код книги: {selected_book[0]}\n\n"
+            out += f"Автор: {selected_book[3]}\n\n"
+            out += f"Наименование: {selected_book[1]}\n\n"
+            out += f"Аннотация: {selected_book[2]}\n\n"
+            out += f"Издательство: {selected_book[4]}\n\n"
+            out += f"Возрастной рейтинг: {selected_book[5]}"
+            self.name = selected_book[1]
+            self.label_book.setText(out)
+            print(*selected_book)
+
+    def next_step(self):
+        self.ui = PrepareBook(self.current_book, self.name)
+        self.ui.show()
 
 
 class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -30,6 +107,14 @@ class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_books.clicked.connect(self.open_knigi)
         self.pushButton_out.clicked.connect(self.open_uchet)
         self.reset_filter()
+        self.tableWidget.cellPressed[int, int].connect(self.clickedRowColumn)
+        self.tableWidget.setMouseTracking(True)
+
+    def clickedRowColumn(self, r, c):
+        #print("row={}, column={}".format(r, c))
+        if c == 0:
+            self.ui = ViewBook(self.tableWidget.item(self.tableWidget.currentRow(), 0).text())
+            self.ui.show()
 
     def reset_filter(self):
         # Подключение к существующей базе данных
@@ -67,11 +152,12 @@ class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for column_number, data in enumerate(row_data):
 
                 if column_number == 2:
-                    text_edit = QtWidgets.QTextEdit(str(data))
-                    text_edit.setReadOnly(True)
-                    text_edit.setFrameStyle(QtWidgets.QFrame.NoFrame)
-                    text_edit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-                    self.tableWidget.setCellWidget(row_number, column_number, text_edit)
+                    pass
+                    # text_edit = QtWidgets.QTextEdit(str(data))
+                    # text_edit.setReadOnly(True)
+                    # text_edit.setFrameStyle(QtWidgets.QFrame.NoFrame)
+                    # text_edit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+                    # self.tableWidget.setCellWidget(row_number, column_number, text_edit)
                 else:
                     item = QtWidgets.QTableWidgetItem(str(data))
                     item.setTextAlignment(QtCore.Qt.AlignHCenter)
@@ -83,7 +169,7 @@ class BBMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tableWidget.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)  # Prevent column resizing
         self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        # self.tableWidget.setShowGrid(True)
+        self.tableWidget.setShowGrid(True)
         # self.tableWidget.setGridStyle(QtCore.Qt.SolidLine)
         self.tableWidget.resizeRowsToContents()
 
